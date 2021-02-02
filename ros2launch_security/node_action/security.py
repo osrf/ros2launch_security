@@ -1,3 +1,4 @@
+# Copyright 2020 Canonical, Ltd.
 # Copyright 2021 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +18,17 @@ from typing import Dict
 from typing import List
 from typing import Union
 
-from launch_ros.actions.node import NodeActionExtension, Node
-
 from launch.launch_context import LaunchContext
 from launch.substitutions import LocalSubstitution
 from launch.utilities import normalize_to_list_of_substitutions
+from launch_ros.actions.node import Node, NodeActionExtension
 
 import nodl
 import sros2.api._keystore
 
 
 class SecurityNodeActionExtension(NodeActionExtension):
+
     def command_extension(self, context):
         if context.launch_configurations.get('__secure', None) is not None:
             cmd_extension = ['--enclave', LocalSubstitution("ros_specific_arguments['enclave']")]

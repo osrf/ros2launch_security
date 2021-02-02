@@ -12,7 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
     ],
-    install_requires=['ros2launch'],
+    install_requires=['ros2launch', 'launch_ros', 'setuptools'],
     zip_safe=True,
     author='Joe Example',
     author_email='joe@example.com',
@@ -26,10 +26,12 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
+        'Topic :: Software Development',
     ],
-    description='The security extension for ros2launch',
-    long_description="""\
-The package provides an extension adding security capabilities to the ROS 2 launch command line tool.""",
+    description='The security extensions for ros2 launch',
+    long_description=(
+        'The package provides an extension adding security '
+        'capabilities to the ROS 2 launch command line tool.'),
     license='Apache License, Version 2.0',
     tests_require=['pytest'],
     entry_points={

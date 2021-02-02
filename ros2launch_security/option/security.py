@@ -1,3 +1,4 @@
+# Copyright 2020 Canonical, Ltd.
 # Copyright 2021 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sros2.api._keystore
 
-import launch
 import pathlib
-from ros2launch.option import OptionExtension
 from tempfile import TemporaryDirectory
 from typing import Optional
 from typing import Tuple
+
+import launch
+from ros2launch.option import OptionExtension
+import sros2.api._keystore
 
 
 class NoKeystoreProvidedError(Exception):
@@ -47,7 +49,9 @@ class InvalidKeystoreError(Exception):
                           f'the keystore "{keystore_path}" is not initialized. \n\t'
                           f'(Try running: ros2 security create_keystore {keystore_path})'))
 
+
 class SecurityOption(OptionExtension):
+
     def add_arguments(self, parser, cli_name, *, argv=None):
         sec_args = parser.add_argument_group(
             title='security',
@@ -62,7 +66,7 @@ class SecurityOption(OptionExtension):
                   'Will set up an ephemeral keystore if one is not specified.'),
         )
         try:
-            arg.completer = DirectoriesCompleter() # argcomplete is optional
+            arg.completer = DirectoriesCompleter()  # argcomplete is optional
         except NameError:
             pass
 
@@ -94,7 +98,9 @@ class SecurityOption(OptionExtension):
                 launch.actions.SetEnvironmentVariable(
                     name='ROS_SECURITY_KEYSTORE', value=str(keystore.path)
                 ),
-                launch.actions.SetEnvironmentVariable(name='ROS_SECURITY_STRATEGY', value='Enforce'),
+                launch.actions.SetEnvironmentVariable(
+                    name='ROS_SECURITY_STRATEGY',
+                    value='Enforce'),
                 launch.actions.SetEnvironmentVariable(name='ROS_SECURITY_ENABLE', value='true'),
             ]
             + launch_description.entities
@@ -106,6 +112,7 @@ class SecurityOption(OptionExtension):
 class _Keystore:
     """
     Object that contains a keystore.
+
     If a transient keystore is created, contains the temporary directory, assuring
     it is destroyed alongside the _Keystore object.
     """
