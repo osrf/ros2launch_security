@@ -6,9 +6,10 @@
   <name>ros2launch_security</name>
   <version>0.1.0</version>
   <description>Security extensions for ros2 launch</description>
-  <maintainer email="joe@example.com">Joe Example</maintainer>
+  <maintainer email="kyle@canonical.com">Kyle Fazzari</maintainer>
   <license>Apache License 2.0</license>
-  <author email="joe@example.com">Joe Example</author>
+  <author email="geoff@openrobotics.org">Geoffrey Biggs</author>
+  <author email="kyle@canonical.com">Kyle Fazzari</author>
 
   <depend>ament_index_python</depend>
   <depend>ros2launch</depend>
