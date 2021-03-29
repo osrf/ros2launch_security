@@ -32,12 +32,6 @@ from sros2.api._keystore import is_valid_keystore
 
 class TestNodeActionSecurityExtension(unittest.TestCase):
 
-    def _assert_launch_errors(self, actions):
-        ld = LaunchDescription(actions)
-        ls = LaunchService(debug=True)
-        ls.include_launch_description(ld)
-        assert 0 != ls.run()
-
     def _assert_launch_no_errors(self, actions):
         ld = LaunchDescription(actions)
         ls = LaunchService(debug=True)
