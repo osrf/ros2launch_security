@@ -32,7 +32,7 @@ class NoKeystoreProvidedError(Exception):
                           'no keystore was provided'))
 
 
-class NonexistantKeystoreError(Exception):
+class NonexistentKeystoreError(Exception):
     """Exception raised when keystore is not on disk."""
 
     def __init__(self, keystore_path: pathlib.Path):
