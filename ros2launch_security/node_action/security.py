@@ -37,9 +37,9 @@ class SecurityNodeActionExtension(NodeActionExtension):
         else:
             return []
 
-    def execute(self, context, ros_specific_arguments, node_info):
+    def pre_execute(self, context, ros_specific_arguments, node_action):
         if context.launch_configurations.get('__secure', None) is not None:
-            return self._setup_security(context, ros_specific_arguments, node_info)
+            return self._setup_security(context, ros_specific_arguments, node_action)
         else:
             return ros_specific_arguments
 
@@ -47,15 +47,15 @@ class SecurityNodeActionExtension(NodeActionExtension):
         self,
         context: LaunchContext,
         ros_specific_arguments: Dict[str, Union[str, List[str]]],
-        node_info: NodeActionExtension.NodeInfo
+        node_action: Node
     ) -> None:
         """Enable encryption, creating a key for the node if necessary."""
         nodl_node = nodl.get_node_by_executable(
-            package_name=node_info.package,
-            executable_name=node_info.executable
+            package_name=node_action.node_package,
+            executable_name=node_action.node_executable
         )
 
-        self.__enclave = node_info.name.replace(
+        self.__enclave = node_action.node_name.replace(
             Node.UNSPECIFIED_NODE_NAME, nodl_node.name
         ).replace(Node.UNSPECIFIED_NODE_NAMESPACE, '')
 
