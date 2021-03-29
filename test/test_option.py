@@ -15,6 +15,7 @@
 
 """Tests for the launch api."""
 
+import gc
 import pytest
 
 from ros2launch_security.option.security import _Keystore
@@ -37,6 +38,7 @@ def test__keystore_existing_keystore(keystore_path):
 
     # Test that it doesn't delete a provided keystore when done
     del res
+    gc.collect()
     assert sros2.api._keystore.is_valid_keystore(keystore_path)
 
 
@@ -45,6 +47,7 @@ def test__keystore_valid_path_uninitialized_success(tmp_path):
     assert sros2.api._keystore.is_valid_keystore(tmp_path)
 
     del res
+    gc.collect()
     assert sros2.api._keystore.is_valid_keystore(tmp_path)
 
 
@@ -58,6 +61,7 @@ def test__keystore_valid_path_nonexistant_success(tmp_path):
     assert sros2.api._keystore.is_valid_keystore(tmp_path / 'foo')
 
     del res
+    gc.collect()
     assert sros2.api._keystore.is_valid_keystore(tmp_path / 'foo')
 
 
