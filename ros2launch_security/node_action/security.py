@@ -29,19 +29,18 @@ import sros2.api._keystore
 
 class SecurityNodeActionExtension(NodeActionExtension):
 
-    def command_extension(self, context):
+    def prepare_for_execute(self, context, ros_specific_arguments, node_action):
         if context.launch_configurations.get('__secure', None) is not None:
             cmd_extension = ['--enclave', LocalSubstitution("ros_specific_arguments['enclave']")]
             cmd_extension = [normalize_to_list_of_substitutions(x) for x in cmd_extension]
-            return cmd_extension
+            ros_specific_arguments = self._setup_security(
+                context,
+                ros_specific_arguments,
+                node_action
+            )
+            return cmd_extension, ros_specific_arguments
         else:
-            return []
-
-    def pre_execute(self, context, ros_specific_arguments, node_action):
-        if context.launch_configurations.get('__secure', None) is not None:
-            return self._setup_security(context, ros_specific_arguments, node_action)
-        else:
-            return ros_specific_arguments
+            return [], ros_specific_arguments
 
     def _setup_security(
         self,
