@@ -25,9 +25,10 @@ from unittest.mock import patch
 from launch import LaunchDescription
 from launch import LaunchService
 from launch.actions import DeclareLaunchArgument
-import launch_ros.actions.node
-from sros2.api._keystore import create_keystore
-from sros2.api._keystore import is_valid_keystore
+import launch_ros.actions
+
+from sros2.keystore._keystore import create_keystore
+from sros2.keystore._keystore import is_valid_keystore
 
 
 class TestNodeActionSecurityExtension(unittest.TestCase):
@@ -56,12 +57,13 @@ class TestNodeActionSecurityExtension(unittest.TestCase):
         ] + actions
 
     def _assert_has_enclave(self, node, node_name):
-        assert any('--enclave' in cmd[0].describe() for cmd in node.cmd)
-        assert node._Node__enclave == node_name
+        assert '--enclave' in node.process_details['cmd']
+        i = node.process_details['cmd'].index('--enclave')
+        assert node_name == node.process_details['cmd'][i + 1]
 
-    @patch('launch_ros.actions.node.nodl', autospec=True)
-    def test_launch_node_secure_fully_qualified(self, nodl_mock):
-        nodl_mock.get_node_by_executable.return_value.name = 'foo'
+    @patch('nodl.get_node_by_executable', autospec=True)
+    def test_launch_node_secure_fully_qualified(self, get_node_by_executable):
+        get_node_by_executable.return_value.name = 'foo'
         # First try with fully qualified node name specified
         with tempfile.TemporaryDirectory() as tmp:
             with patch.dict(
@@ -78,10 +80,10 @@ class TestNodeActionSecurityExtension(unittest.TestCase):
                 self._assert_has_enclave(node_fixture, '/my_ns/my_node')
                 assert is_valid_keystore(pathlib.Path(tmp))
 
-    @patch('launch_ros.actions.node.nodl', autospec=True)
-    def test_launch_node_secure_no_name(self, nodl_mock):
+    @patch('nodl.get_node_by_executable', autospec=True)
+    def test_launch_node_secure_no_name(self, get_node_by_executable):
         # Now try filling in with node name from nodl
-        nodl_mock.get_node_by_executable.return_value.name = 'foo'
+        get_node_by_executable.return_value.name = 'foo'
         with tempfile.TemporaryDirectory() as tmp:
             with patch.dict(
                 os.environ,
@@ -104,10 +106,10 @@ class TestNodeActionSecurityExtension(unittest.TestCase):
                 self._assert_has_enclave(node_fixture, '/my_ns/foo')
                 assert is_valid_keystore(pathlib.Path(tmp))
 
-    @patch('launch_ros.actions.node.nodl', autospec=True)
-    def test_launch_node_secure_no_namespace(self, nodl_mock):
+    @patch('nodl.get_node_by_executable', autospec=True)
+    def test_launch_node_secure_no_namespace(self, get_node_by_executable):
         # Now try with no namespace
-        nodl_mock.get_node_by_executable.return_value.name = 'foo'
+        get_node_by_executable.return_value.name = 'foo'
         with tempfile.TemporaryDirectory() as tmp:
             with patch.dict(
                 os.environ,

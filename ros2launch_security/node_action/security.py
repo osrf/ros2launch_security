@@ -24,7 +24,7 @@ from launch.utilities import normalize_to_list_of_substitutions
 from launch_ros.actions.node import Node, NodeActionExtension
 
 import nodl
-import sros2.api._keystore
+import sros2.keystore._enclave
 
 
 class SecurityNodeActionExtension(NodeActionExtension):
@@ -58,7 +58,7 @@ class SecurityNodeActionExtension(NodeActionExtension):
             Node.UNSPECIFIED_NODE_NAME, nodl_node.name
         ).replace(Node.UNSPECIFIED_NODE_NAMESPACE, '')
 
-        sros2.api._keystore.create_enclave(
+        sros2.keystore._enclave.create_enclave(
             keystore_path=pathlib.Path(context.launch_configurations.get('__keystore')),
             identity=self.__enclave
         )
