@@ -21,7 +21,7 @@ from typing import Tuple
 
 import launch
 from ros2launch.option import OptionExtension
-import sros2.api._keystore
+import sros2.keystore._keystore
 
 
 class NoKeystoreProvidedError(Exception):
@@ -122,8 +122,8 @@ class _Keystore:
             if keystore_path is None:
                 raise NoKeystoreProvidedError()
             if not keystore_path.exists():
-                raise NonexistantKeystoreError(keystore_path)
-            if not sros2.api._keystore.is_valid_keystore(keystore_path):
+                raise NonexistentKeystoreError(keystore_path)
+            if not sros2.keystore._keystore.is_valid_keystore(keystore_path):
                 raise InvalidKeystoreError(keystore_path)
 
         # If keystore path is blank, create a transient keystore
@@ -136,8 +136,8 @@ class _Keystore:
         # If keystore is not initialized, create a keystore
         if not self._keystore_path.is_dir():
             self._keystore_path.mkdir()
-        if not sros2.api._keystore.is_valid_keystore(self._keystore_path):
-            sros2.api._keystore.create_keystore(self._keystore_path)
+        if not sros2.keystore._keystore.is_valid_keystore(self._keystore_path):
+            sros2.keystore._keystore.create_keystore(self._keystore_path)
 
     @property
     def path(self) -> pathlib.Path:
