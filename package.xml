@@ -9,7 +9,7 @@
   <maintainer email="ted.kern@canonical.com">Ted Kern</maintainer>
   <license>Apache License 2.0</license>
   <author email="geoff@openrobotics.org">Geoffrey Biggs</author>
-  <author email="kyle@canonical.com">Kyle Fazzari</author>
+  <author email="ted.kern@canonical.com">Ted Kern</author>
 
   <depend>ament_index_python</depend>
   <depend>ros2launch</depend>
