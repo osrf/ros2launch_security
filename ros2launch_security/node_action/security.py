@@ -52,10 +52,12 @@ class SecurityNodeActionExtension(NodeActionExtension):
         """Enable encryption, creating a key for the node if necessary."""
         nodl_node = nodl.get_node_by_executable(
             package_name=perform_substitutions(
-                context, node_action.node_package
+                context,
+                normalize_to_list_of_substitutions(node_action.node_package)
             ),
             executable_name=perform_substitutions(
-                context, node_action.node_executable
+                context,
+                normalize_to_list_of_substitutions(node_action.node_executable)
             )
         )
 
