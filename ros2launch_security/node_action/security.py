@@ -21,6 +21,7 @@ from typing import Union
 from launch.launch_context import LaunchContext
 from launch.substitutions import LocalSubstitution
 from launch.utilities import normalize_to_list_of_substitutions
+from launch.utilities import perform_substitutions
 from launch_ros.actions.node import Node, NodeActionExtension
 
 import nodl
@@ -50,8 +51,14 @@ class SecurityNodeActionExtension(NodeActionExtension):
     ) -> None:
         """Enable encryption, creating a key for the node if necessary."""
         nodl_node = nodl.get_node_by_executable(
-            package_name=node_action.node_package,
-            executable_name=node_action.node_executable
+            package_name=perform_substitutions(
+                context,
+                normalize_to_list_of_substitutions(node_action.node_package)
+            ),
+            executable_name=perform_substitutions(
+                context,
+                normalize_to_list_of_substitutions(node_action.node_executable)
+            )
         )
 
         self.__enclave = node_action.node_name.replace(
