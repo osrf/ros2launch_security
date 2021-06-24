@@ -42,8 +42,8 @@ public:
           this->get_logger(),
           "Recieved imu with yaw rate = " << msg.angular_velocity.z);
         number_of_imu_messages_++;
-        if (number_of_imu_messages_ > 100) {
-          // Every 100 messages, reset the IMU using the service.
+        if (number_of_imu_messages_ > 10) {
+          // Every N messages, reset the IMU using the service.
           this->reset_imu();
         }
       }

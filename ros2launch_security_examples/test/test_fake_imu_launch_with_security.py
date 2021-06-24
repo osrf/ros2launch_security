@@ -17,9 +17,8 @@ import os
 import unittest
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import ExecuteProcess
 from launch.actions import SetEnvironmentVariable
-from launch.launch_description_sources import AnyLaunchDescriptionSource
 
 import launch_testing
 import launch_testing_ros
@@ -35,9 +34,15 @@ def generate_test_description():
         SetEnvironmentVariable('RCUTILS_CONSOLE_OUTPUT_FORMAT', '{message}')
     )
     launch_description.add_action(
-        IncludeLaunchDescription(AnyLaunchDescriptionSource(
-            os.path.join(g_this_dir, '..', 'launch', 'fake_imu.launch.xml')
-        ))
+        ExecuteProcess(
+            cmd=[
+                'ros2', 'launch',
+                os.path.join(g_this_dir, '..', 'launch', 'fake_imu.launch.xml'),
+                '--secure',
+            ],
+            name='ros2_launch_fake_imu',
+            output='screen',
+        )
     )
 
     launch_description.add_action(launch_testing.util.KeepAliveProc())
@@ -59,8 +64,16 @@ class TestFakeImuLaunch(unittest.TestCase):
         )
 
         expected_outputs = [
-            ('fake_imu', os.path.join(g_this_dir, 'expected_outputs', 'fake_imu')),
-            ('imu_sink', os.path.join(g_this_dir, 'expected_outputs', 'imu_sink')),
+            # (Process, file containing expected output for the process)
+            # None indicates, any process can produce the output.
+            (None, os.path.join(g_this_dir, 'expected_outputs', 'fake_imu')),
+            (None, os.path.join(g_this_dir, 'expected_outputs', 'imu_sink')),
+            # TODO(wjwwood): right now, looking for the "Found security directory ..."
+            #   messages output anywhere, but it would be better to assert that
+            #   the outptu is cominig from the right processes, but that would
+            #   require figuring out how to integrate the `--secure` option for
+            #   'ros2 launch' into launch_testinig...
+            (None, os.path.join(g_this_dir, 'expected_outputs', 'enclave_used')),
         ]
         for process, expected_output_file in expected_outputs:
             proc_output.assertWaitFor(
@@ -69,14 +82,10 @@ class TestFakeImuLaunch(unittest.TestCase):
                     path=expected_output_file
                 ),
                 output_filter=output_filter,
-                timeout=30,
+                timeout=10,
+                # This is needed because ros2 launch channels things to stdout.
+                stream='stdout',
             )
-
-        # # TODO(hidmic): either make the underlying executables resilient to
-        # # interruptions close/during shutdown OR adapt the testing suite to
-        # # better cope with it.
-        # import time
-        # time.sleep(5)
 
 
 @launch_testing.post_shutdown_test()
@@ -84,5 +93,4 @@ class TestFakeImuLaunchAfterShutdown(unittest.TestCase):
 
     def test_last_process_exit_code(self, proc_info):
         """Test last process exit code."""
-        launch_testing.asserts.assertExitCodes(proc_info, process='fake_imu')
-        launch_testing.asserts.assertExitCodes(proc_info, process='imu_sink')
+        launch_testing.asserts.assertExitCodes(proc_info, process=None)
