@@ -65,7 +65,7 @@ public:
     reset_imu_service_ = this->create_service<example_interfaces::srv::Trigger>(
       "reset_imu",
       [this](
-        const std::shared_ptr<example_interfaces::srv::Trigger::Request> /* request */,
+        const std::shared_ptr<example_interfaces::srv::Trigger::Request>/* request */,
         std::shared_ptr<example_interfaces::srv::Trigger::Response> response)
       {
         RCLCPP_INFO(this->get_logger(), "Reseting IMU due to service request.");
@@ -86,7 +86,6 @@ private:
   size_t loop_count_{0};
   std::thread thread_;
   std::shared_ptr<rclcpp::Service<example_interfaces::srv::Trigger>> reset_imu_service_;
-
 };
 
 }  // namespace ros2launch_security_examples

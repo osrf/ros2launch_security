@@ -51,6 +51,7 @@ def generate_test_description():
 
 
 class TestFakeImuLaunch(unittest.TestCase):
+
     def test_processes_output(self, proc_output):
         """Test all processes output against expectations."""
         # Assumption is that this environment variable is always set by the test runner.

@@ -73,7 +73,6 @@ private:
   size_t number_of_imu_messages_{0};
   std::shared_ptr<rclcpp::Client<example_interfaces::srv::Trigger>> reset_imu_client_;
   std::shared_ptr<rclcpp::Subscription<sensor_msgs::msg::Imu>> subscription_;
-
 };
 
 }  // namespace ros2launch_security_examples
