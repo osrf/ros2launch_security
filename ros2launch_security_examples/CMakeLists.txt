@@ -57,4 +57,28 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}/
 )
 
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+
+  find_package(launch_testing_ament_cmake REQUIRED)
+
+  get_default_rmw_implementation(default_rmw_implementation)
+
+  add_launch_test(
+    "test/test_fake_imu_launch.py"
+    TARGET test_fake_imu_launch
+    TIMEOUT 60
+    ENV
+      RCL_ASSERT_RMW_ID_MATCHES=${default_rmw_implementation}
+      RMW_IMPLEMENTATION=${default_rmw_implementation}
+  )
+  set_tests_properties(
+    test_fake_imu_launch
+    PROPERTIES
+      DEPENDS fake_imu
+      DEPENDS imu_sink
+  )
+endif()
+
 ament_package()
