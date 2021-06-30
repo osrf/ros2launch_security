@@ -73,12 +73,6 @@ class TestFakeImuLaunch(unittest.TestCase):
                 timeout=30,
             )
 
-        # # TODO(hidmic): either make the underlying executables resilient to
-        # # interruptions close/during shutdown OR adapt the testing suite to
-        # # better cope with it.
-        # import time
-        # time.sleep(5)
-
 
 @launch_testing.post_shutdown_test()
 class TestFakeImuLaunchAfterShutdown(unittest.TestCase):
