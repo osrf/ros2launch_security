@@ -71,9 +71,9 @@ class TestFakeImuLaunch(unittest.TestCase):
             (None, os.path.join(g_this_dir, 'expected_outputs', 'imu_sink')),
             # TODO(wjwwood): right now, looking for the "Found security directory ..."
             #   messages output anywhere, but it would be better to assert that
-            #   the outptu is cominig from the right processes, but that would
+            #   the output is coming from the right processes, but that would
             #   require figuring out how to integrate the `--secure` option for
-            #   'ros2 launch' into launch_testinig...
+            #   'ros2 launch' into launch_testing...
             (None, os.path.join(g_this_dir, 'expected_outputs', 'enclave_used')),
         ]
         for process, expected_output_file in expected_outputs:
