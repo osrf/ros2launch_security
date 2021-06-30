@@ -37,11 +37,6 @@ rclcpp_components_register_node(imu_sink_library
 # nodl_export_node_description_file(nodl/imu_sink.nodl.xml)
 nodl_export_node_description_file(imu_sink.nodl.xml)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-endif()
-
 install(
   TARGETS
     fake_imu_library

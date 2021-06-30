@@ -36,6 +36,12 @@ def generate_test_description():
     launch_description.add_action(
         ExecuteProcess(
             cmd=[
+                # TODO(wjwwood): instead of running `ros2 launch` with the `--secure`
+                #   option, include the launch file normally, e.g. like the
+                #   test_fake_imu_launch.py peer to this test, but this cannot
+                #   be done until we integrate the ros2launch_security plugin
+                #   into `launch_testing`, in addition to `ros2launch`.
+                #   See: https://github.com/osrf/ros2launch_security/issues/5
                 'ros2', 'launch',
                 os.path.join(g_this_dir, '..', 'launch', 'fake_imu.launch.xml'),
                 '--secure',
@@ -73,7 +79,8 @@ class TestFakeImuLaunch(unittest.TestCase):
             #   messages output anywhere, but it would be better to assert that
             #   the output is coming from the right processes, but that would
             #   require figuring out how to integrate the `--secure` option for
-            #   'ros2 launch' into launch_testing...
+            #   'ros2 launch' into launch_testing.
+            #   See: https://github.com/osrf/ros2launch_security/issues/5
             (None, os.path.join(g_this_dir, 'expected_outputs', 'enclave_used')),
         ]
         for process, expected_output_file in expected_outputs:
