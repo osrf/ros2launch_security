@@ -78,9 +78,19 @@ if(BUILD_TESTING)
       RMW_IMPLEMENTATION=${default_rmw_implementation}
   )
 
+  add_launch_test(
+    "test/test_fake_imu_launch_with_security_nodltopolicy.py"
+    TARGET test_fake_imu_launch_with_security_nodl_to_policy
+    TIMEOUT 60
+    ENV
+      RCL_ASSERT_RMW_ID_MATCHES=${default_rmw_implementation}
+      RMW_IMPLEMENTATION=${default_rmw_implementation}
+  )
+
   set_tests_properties(
     test_fake_imu_launch
     test_fake_imu_launch_with_security
+    test_fake_imu_launch_with_security_nodl_to_policy
     PROPERTIES
       DEPENDS fake_imu
       DEPENDS imu_sink
