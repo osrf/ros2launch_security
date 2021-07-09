@@ -34,17 +34,32 @@ g_this_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_permissions(keystore_path: Path) -> None:
+    # obtain `fake_imu.nodl.xml` and `imu_sink.nodl.xml`
     nodl_description = _get_nodes_from_package(
         package_name='ros2launch_security_examples')
+
     policy = convert_to_policy(nodl_description)
+
+    # `_artifact_generation` requires a policy file path, so
+    # the converted policy requires storing in a temporary file
     policy_file_path = NamedTemporaryFile().name
     with open(policy_file_path, 'w') as stream:
         dump_policy(policy, stream)
+
+    # generates permission artifacts for all the entities in the policy file
     _artifact_generation.generate_artifacts(
         keystore_path, [], [Path(policy_file_path)])
 
 
 def secure_launch_description() -> LaunchDescription:
+    """
+    Run `ros2 launch [...] --secure` plus create a keystore with permissions artifacts.
+
+    In generating the permissions artifacts, `nodl_to_policy` is used to convert NoDL
+    files in the package to corresponding access control policies. These policies are
+    then supplied to `sros2.api._artifact_generation.generate_artifacts` to set up
+    the appropriate DDS specific permissions files.
+    """
     keystore_path = TemporaryDirectory().name
 
     launch_description = LaunchDescription()
@@ -64,14 +79,14 @@ def secure_launch_description() -> LaunchDescription:
                 #   See: https://github.com/osrf/ros2launch_security/issues/5
                 'ros2', 'launch',
                 os.path.join(g_this_dir, '..', 'launch', 'fake_imu.launch.xml'),
-                '--secure', keystore_path,
+                '--secure', keystore_path,  # provide a known keystore path to store artifacts in
             ],
             name='ros2_launch_fake_imu',
             output='screen',
         )
     )
 
-    create_permissions(Path(keystore_path))
+    create_permissions(Path(keystore_path))  # to correctly initialize keystore, generate artifacts
 
     launch_description.add_action(launch_testing.util.KeepAliveProc())
     launch_description.add_action(launch_testing.actions.ReadyToTest())
@@ -79,8 +94,7 @@ def secure_launch_description() -> LaunchDescription:
 
 
 def generate_test_description():
-    launch_description = secure_launch_description()
-    return launch_description, locals()
+    return secure_launch_description(), locals()
 
 
 class TestFakeImuLaunch(unittest.TestCase):
