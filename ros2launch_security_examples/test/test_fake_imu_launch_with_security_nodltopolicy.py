@@ -25,7 +25,7 @@ from launch.actions import SetEnvironmentVariable
 import launch_testing
 import launch_testing_ros
 
-from nodl_python._index import _get_nodes_from_package
+from nodl._index import _get_nodes_from_package
 from nodl_to_policy.policy import convert_to_policy
 from sros2.api import _artifact_generation
 from sros2.policy import dump_policy
@@ -34,13 +34,14 @@ g_this_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_permissions(keystore_path: Path) -> None:
-    nodl_description = _get_nodes_from_package('ros2launch_security_examples')
+    nodl_description = _get_nodes_from_package(
+        package_name='ros2launch_security_examples')
     policy = convert_to_policy(nodl_description)
     policy_file_path = NamedTemporaryFile().name
-    with open(profile_file_path, 'w') as stream:
+    with open(policy_file_path, 'w') as stream:
         dump_policy(policy, stream)
     _artifact_generation.generate_artifacts(
-        keystore_path, [], policy_file_path)
+        keystore_path, [], [Path(policy_file_path)])
 
 
 def secure_launch_description() -> LaunchDescription:
