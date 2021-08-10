@@ -65,10 +65,13 @@ class SecurityNodeActionExtension(NodeActionExtension):
             Node.UNSPECIFIED_NODE_NAME, nodl_node.name
         ).replace(Node.UNSPECIFIED_NODE_NAMESPACE, '')
 
-        sros2.keystore._enclave.create_enclave(
-            keystore_path=pathlib.Path(context.launch_configurations.get('__keystore')),
-            identity=self.__enclave
-        )
+        # Create an enclave only when it does not exist
+        keystore_path=pathlib.Path(context.launch_configurations.get('__keystore'))
+        if self.__enclave not in sros2.keystore._enclave.get_enclaves(keystore_path):
+            sros2.keystore._enclave.create_enclave(
+                keystore_path=keystore_path,
+                identity=self.__enclave
+            )
 
         ros_specific_arguments['enclave'] = self.__enclave
         return ros_specific_arguments
