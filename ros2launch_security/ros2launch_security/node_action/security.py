@@ -66,7 +66,7 @@ class SecurityNodeActionExtension(NodeActionExtension):
         ).replace(Node.UNSPECIFIED_NODE_NAMESPACE, '')
 
         # Create an enclave only when it does not exist
-        keystore_path=pathlib.Path(context.launch_configurations.get('__keystore'))
+        keystore_path = pathlib.Path(context.launch_configurations.get('__keystore'))
         if self.__enclave not in sros2.keystore._enclave.get_enclaves(keystore_path):
             sros2.keystore._enclave.create_enclave(
                 keystore_path=keystore_path,
