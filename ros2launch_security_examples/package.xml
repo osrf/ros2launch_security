@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ros2launch_security_examples</name>
-  <version>0.0.0</version>
+  <version>1.0.0</version>
   <description>Examples of how to use the ros2launch_security extension.</description>
   <maintainer email="ted.kern@canonical.com">Ted Kern</maintainer>
   <license>Apache License 2.0</license>

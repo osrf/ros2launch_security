@@ -4,7 +4,7 @@
   schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>ros2launch_security</name>
-  <version>0.1.0</version>
+  <version>1.0.0</version>
   <description>Security extensions for ros2 launch</description>
   <maintainer email="ted.kern@canonical.com">Ted Kern</maintainer>
   <license>Apache License 2.0</license>
