@@ -16,7 +16,7 @@ find_package(rclpy REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 add_library(fake_imu_library SHARED src/fake_imu.cpp)
-ament_target_dependencies(fake_imu_library rclcpp rclcpp_components sensor_msgs example_interfaces)
+target_link_libraries(fake_imu_library PUBLIC rclcpp rclcpp_components sensor_msgs example_interfaces)
 rclcpp_components_register_node(fake_imu_library
   PLUGIN "ros2launch_security_examples::FakeImu"
   EXECUTABLE fake_imu
@@ -27,7 +27,7 @@ rclcpp_components_register_node(fake_imu_library
 nodl_export_node_description_file(fake_imu.nodl.xml)
 
 add_library(imu_sink_library SHARED src/imu_sink.cpp)
-ament_target_dependencies(imu_sink_library rclcpp rclcpp_components sensor_msgs example_interfaces)
+target_link_libraries(imu_sink_library PUBLIC rclcpp rclcpp_components sensor_msgs example_interfaces)
 rclcpp_components_register_node(imu_sink_library
   PLUGIN "ros2launch_security_examples::ImuSink"
   EXECUTABLE imu_sink
