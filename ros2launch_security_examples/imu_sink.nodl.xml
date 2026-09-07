@@ -1,6 +1,0 @@
-<interface version="1">
-  <node name="imu_sink" executable="imu_sink">
-    <topic name="imu" type="sensor_msgs/msg/Imu" role="subscription" />
-    <service name="reset_imu" type="example_interfaces/srv/Trigger" role="client" />
-  </node>
-</interface>

@@ -21,10 +21,7 @@ rclcpp_components_register_node(fake_imu_library
   PLUGIN "ros2launch_security_examples::FakeImu"
   EXECUTABLE fake_imu
 )
-# TODO(wjwwood): go back to organizing these into a nodl folder when this is fixed:
-#   https://github.com/ubuntu-robotics/nodl/issues/41
-# nodl_export_node_description_file(nodl/fake_imu.nodl.xml)
-nodl_export_node_description_file(fake_imu.nodl.xml)
+ament_nodl_register(fake_imu FILE nodl/fake_imu.nodl.yaml)
 
 add_library(imu_sink_library SHARED src/imu_sink.cpp)
 ament_target_dependencies(imu_sink_library rclcpp rclcpp_components sensor_msgs example_interfaces)
@@ -32,10 +29,7 @@ rclcpp_components_register_node(imu_sink_library
   PLUGIN "ros2launch_security_examples::ImuSink"
   EXECUTABLE imu_sink
 )
-# TODO(wjwwood): go back to organizing these into a nodl folder when this is fixed:
-#   https://github.com/ubuntu-robotics/nodl/issues/41
-# nodl_export_node_description_file(nodl/imu_sink.nodl.xml)
-nodl_export_node_description_file(imu_sink.nodl.xml)
+ament_nodl_register(imu_sink FILE nodl/imu_sink.nodl.yaml)
 
 install(
   TARGETS

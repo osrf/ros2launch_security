@@ -1,0 +1,14 @@
+---
+nodl_version: 2
+description: Fake IMU node that periodically publishes synthetic IMU messages.
+publishers:
+  - name: imu
+    type: sensor_msgs/msg/Imu
+    qos:
+      history: KEEP_LAST
+      depth: 10
+      reliability: RELIABLE
+      durability: VOLATILE
+service_servers:
+  - name: reset_imu
+    type: example_interfaces/srv/Trigger
