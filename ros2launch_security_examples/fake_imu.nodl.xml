@@ -1,6 +1,0 @@
-<interface version="1">
-  <node name="fake_imu" executable="fake_imu">
-    <topic name="imu" type="sensor_msgs/msg/Imu" role="publisher" />
-    <service name="reset_imu" type="example_interfaces/srv/Trigger" role="server" />
-  </node>
-</interface>
