@@ -13,7 +13,7 @@
 
   <depend>ament_index_python</depend>
   <depend>ros2launch</depend>
-  <depend>nodl_python</depend>
+  <depend>nodl</depend>
   <depend>sros2</depend>
 
   <test_depend>ament_copyright</test_depend>
